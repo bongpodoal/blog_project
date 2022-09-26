@@ -4,7 +4,7 @@ class Post(models.Model):
     # 게시물의 제목
     content = models.TextField()
     # 게시물의 내용
-
+    head_image = models.ImageField(upload_to='blog/images/%Y/%m/%d/', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     # 월,일,시 를 기록할 수 있게 하는 필드
