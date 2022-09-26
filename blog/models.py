@@ -2,6 +2,7 @@ from django.db import models
 import os
 class Post(models.Model):
     title = models.CharField(max_length=30)
+    hook_text = models.CharField(max_length=100, blank=True)
     # 게시물의 제목
     content = models.TextField()
     # 게시물의 내용
