@@ -1,17 +1,12 @@
 from django.shortcuts import render
+from django.views.generic import ListView
 from .models import Post
-def index(request):
-    posts = Post.objects.all().order_by('-pk')
-    # 모델에 있는 모든 레코드를 가져온다.(예:제목,내용,날짜)
-    return render(
-        request,
-        'blog/index.html',
-        {
-            'posts': posts,
-        }
 
-    )
-# 사용자에게 index.html 보여줍니다
+# 사용자에게 post_list.html 보여줍니다
+class PostList(ListView):
+    model = Post
+    ordering = '-pk'
+
 
 def single_post_page(request, pk):
     post = Post.objects.get(pk=pk)
