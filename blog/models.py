@@ -11,5 +11,8 @@ class Post(models.Model):
 
     def __str__(self):
         return f'[{self.pk}]{self.title}'
+
+    def get_absolute_url(self):
+        return f'/blog/{self.pk}'
     # 포스트의 제목과 번호를 문자열로 표현
     # author: 추후 추가 예정
