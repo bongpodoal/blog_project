@@ -8,4 +8,6 @@ urlpatterns = [
     path('blog/', include('blog.urls')),
     # blog/가 붙었을 떄, blog폴더에 urls.py로 패스합니다
     path('admin/', admin.site.urls),
+    path('', include('single_pages.urls')),
+    # 도메인 뒤에 아무것도 없을 때 실행되는 url
 ]
