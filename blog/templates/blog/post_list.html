@@ -10,8 +10,8 @@
 
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light"> <!-- 웹사이트의 맨 위 네비게이션-->
-            <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container" >
 
 
             <a class="navbar-brand" href="#">Bongcheon's Web</a>
@@ -22,10 +22,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
               <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                  <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                  <a class="nav-link" href="#">Blog <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#">Link</a>
+                  <a class="nav-link" href="#">About Me</a>
                 </li>
                 <li class="nav-item dropdown">
                   <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -52,9 +52,10 @@
                 <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
               </form>
             </div>
-
-          </nav>
+        </div>
         </nav>
+
+
     <!-- Modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -74,7 +75,6 @@
             <div class="col-md-6">
                 <button type="button" class="btn btn-outline-dark btn-block btn-sm" ><i class="fa-regular fa-envelope"></i>&nbsp&nbsp Sign Up with E-mail</button>
             </div>
-
            </div>
          </div>
          <div class="modal-footer">
@@ -89,32 +89,49 @@
         <div class="container">
             <div class="row">
                 <!-- Blog entries-->
-                <div class="col-lg-8">
-                    <h1>Blog</h1>
-                    <!-- Featured blog post-->
-                    {% for p in post_list %}
-                    <div class="card mb-4">
-                        {% if p.head_image %}
-                        <a href="#!"><img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head im-age" /></a>
-                        <div class="card-body">
-                        {% else %}
-                            <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image"
-                        {% endif %}
-                            <div class="small text-muted">January 1, 2022</div>
-                            <h2 class="card-title">{{ p.title }}</h2>
-                            {% if p.hook_text %}
-                                <h5 class="text-muted">{{ p.hook_text }}</h5>
-                            {% endif %}
-                            <p class="card-text">{{ p.content  | truncatechars:200}}</p>
-                            <a class="btn btn-primary" href="{{ p.get_absolute_url }}">Read more →</a>
-                        </div>
-                        <div class="card-footer text-muted">
-                            Posted on {{ p.created_at }} by
-                            <a href="#">작성자명 쓸 위치(개발예정)</a>
-                        </div>
-                    </div>
-                    {% endfor %}
 
+                 <div class="col-lg-8" id="main-area">
+                   <h1>Blog</h1>
+
+                {% if post_list.exists %}
+
+        {% for p in post_list %}
+            <!-- Blog Post -->
+            <div class="card mb-4">
+                {% if p.head_image %}
+                    <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
+                {% else %}
+                    <img class="card-img-top" src="https://picsum.photos/seed/{{ p.id }}/800/200" alt="random_image">
+                {% endif %}
+                <div class="card-body">
+
+                    <h2 class="card-title">{{ p.title}}</h2>
+                    {% if p.hook_text %}
+                        <h5 class="text-muted">{{ p.hook_text }}</h5>
+                    {% endif %}
+                    <p class="card-text">{{ p.get_content_markdown | truncatewords_html:45 | safe }}</p>
+
+                    {% if p.tags.exists %}
+                        <i class="fas fa-tags"></i>
+                        {% for tag in p.tags.iterator %}
+                            <a href="{{ tag.get_absolute_url }}"><span class="badge badge-pill badge-light">{{ tag }}</span></a>
+                        {% endfor %}
+                        <br/>
+                        <br/>
+                    {% endif %}
+
+                    <a href="{{ p.get_absolute_url }}" class="btn btn-primary">Read More &rarr;</a>
+                </div>
+                <div class="card-footer text-muted">
+                    Posted on {{ p.created_at}} by
+                    <a href="#">{{ p.author | upper }}</a>
+                </div>
+            </div>
+        {% endfor %}
+
+    {% else %}
+        <h3>아직 게시물이 없습니다.</h3>
+    {% endif %}
                     <!-- Pagination-->
                     <nav aria-label="Pagination">
                         <hr class="my-0" />
@@ -132,7 +149,7 @@
                 <!-- Side widgets-->
                 <div class="col-lg-4">
                     <!-- Search widget-->
-                    <div class="card my-4">
+                    <div class="card mb-4 my-3">
                         <div class="card-header">Search</div>
                         <div class="card-body">
                             <div class="input-group">
@@ -171,6 +188,8 @@
                 </div>
             </div>
         </div>
+
+
         <!-- Footer-->
         <footer class="py-5 bg-dark">
             <div class="container"><p class="m-0 text-center text-white">Copyright &copy; bongcheon's Web 2022 </p></div>
