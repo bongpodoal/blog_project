@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 import os
 class Post(models.Model):
     title = models.CharField(max_length=30)
@@ -10,10 +11,12 @@ class Post(models.Model):
     file_upload = models.FileField(upload_to='blog/files/%y/%m/%d', blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
     # 월,일,시 를 기록할 수 있게 하는 필드
 
     def __str__(self):
-        return f'[{self.pk}]{self.title}'
+        return f'[{self.pk}]{self.title} :: {self.author}'
     def get_file_name(self):
         return os.path.basename(self.file_upload.name)
     def get_file_ext(self):
