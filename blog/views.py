@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
@@ -7,6 +8,7 @@ from .models import Post, Category, Tag, Comment
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from .forms import CommentForm
+
 
 
 class PostList(ListView):
@@ -155,18 +157,22 @@ def tag_page(request, slug):
 #             'post': post,
 #         }
 #     )
-def new_comment(request, pk):
+def new_comment(request, pk):   # html에서 "submit"버튼을 눌렀을때 데이터를 전송받습니다. urls를 통해 페이지가 이동됩니다
     if request.user.is_authenticated:
-        post = get_object_or_404(Post, pk=pk)
+        post = get_object_or_404(Post, pk=pk) # Post 모델에서 몇 번째 게시물인지 가져옵니다
 
         if request.method == 'POST':
-            comment_form = CommentForm(request.POST)
-            if comment_form.is_valid():
+            comment_form = CommentForm(request.POST)  # 댓글의 정보를 forms를 거쳐 model로 딕셔너리 형태로 전송합니다.
+            if comment_form.is_valid(): # 모델로부터 가져온 댓글의 데이터를 저장합니다
                 comment = comment_form.save(commit=False)
                 comment.post = post
                 comment.author = request.user
                 comment.save()
-                return redirect(comment.get_absolute_url())
+
+                #score = get_object_or_404(Score, user=request.user) # 댓글 작성자에게 가산점을 부여합니다.
+                #score.score += 1
+                #score.save()
+                return redirect(comment.get_absolute_url())  # 댓글을 달 경우 모델에 의해 #comment-?로 이동합니다.
         else:
             return redirect(post.get_absolute_url())
     else:
