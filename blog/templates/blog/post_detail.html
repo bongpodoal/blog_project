@@ -17,7 +17,13 @@
         <!-- Author -->
         <p class="lead">
             by
-            <a href="#">{{ post.author | upper }}</a>
+            <a href="{% url 'profile' post.author.id %}">{{ post.author }}</a>
+
+
+
+
+
+
         </p>
         <hr>
         {% if user.is_authenticated and user == post.author %}

@@ -1,7 +1,13 @@
+{% load static %}
 
 
-{% block content %}
-  <h1>{{ user.username }}의 프로필입니다.</h1>
-  <img src="{{ user.profile.image.url }}" alt="{{ user.username }}의 프로필 사진입니다.">
-  <p>{{ user.profile.bio }}</p>
-{% endblock %}
+<h1>{{ profile.user.username }}'s Profile</h1>
+{% if profile.profile_image %}
+    <img src="{{ profile.profile_image.url }}" style="max-width:300px;">
+{% else %}
+    <img src="{% static 'profile_pics/default.jpg' %}" style="max-width:300px;">
+{% endif %}
+<p>Email: {{ profile.user.email }}</p>
+<p>Bio: {{ profile.bio }}</p>
+<p>Location: {{ profile.location }}</p>
+<p>Birthdate: {{ profile.birthdate }}</p>

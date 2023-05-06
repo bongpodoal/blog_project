@@ -1,5 +1,7 @@
+from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import DetailView, UpdateView
 
@@ -9,31 +11,17 @@ from .models import Profile
 
 def profile(request, user_id):
     user = get_object_or_404(User, pk=user_id)
-    context = {'user': user}
-    return render(request, 'profiles/profile.html', context)
+    # user_id 기준으로 사용자를 검색하여 profiles 리스트에 저장
+    profiles = Profile.objects.filter(user__id=user_id)
 
-class UserProfileView(DetailView):
-    model = User
-    template_name = 'profiles/profile.html'
-    context_object_name = 'user'
-
-
-class ProfileDetailView(LoginRequiredMixin, DetailView):
-    model = Profile
-    template_name = 'profiles/profile.html'
-    context_object_name = 'profile'
-
-
-class ProfileUpdateView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
-    model = Profile
-    template_name = 'profiles/profile_update.html'
-    context_object_name = 'profile'
-    form_class = ProfileUpdateForm
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
-
-    def test_func(self):
-        profile = self.get_object()
-        return self.request.user == profile.user
+    # profiles 리스트가 비어 있지 않으면 profiles[0]을 사용
+    # user_id를 기준으로 정확히 1개의 프로필만 검색되기 때문에 profiles[0]은 해당 프로필을 가리키게 됩니다.
+    if profiles:
+        profile = profiles[0]
+        context = {
+            'profile': profile,
+        }
+        return render(request, 'profiles/profile.html', context)
+    # profiles 리스트가 비어 있으면 404 오류 발생
+    else:
+        return render(request, 'profiles/profile.html')

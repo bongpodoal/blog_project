@@ -10,6 +10,7 @@ from markdownx.models import MarkdownxField
 from markdownx.utils import markdown
 import os
 
+from profiles.models import Profile
 
 
 class Tag(models.Model):
@@ -72,4 +73,3 @@ class Comment(models.Model):  # 댓글을 달았을 때 정보를 데이터베�
             return self.author.socialaccount_set.first().get_avatar_url()
         else:
             return f'https://doitdjango.com/avatar/id/1344/6d2e1cef446711e6/svg/{self.author.email}'
-

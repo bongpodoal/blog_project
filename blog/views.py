@@ -4,13 +4,21 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
+
+from profiles.models import Profile
 from .models import Post, Category, Tag, Comment
 from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from .forms import CommentForm
 
-
-
+def author_profile(request, user_id):
+    user = get_object_or_404(User, pk=user_id)
+    profile = get_object_or_404(Profile, user=user)
+    context = {
+        'user': user,
+        'profile': profile,
+    }
+    return render(request, 'blog/author_profile.html', context)
 class PostList(ListView):
     model = Post
     ordering = '-pk'

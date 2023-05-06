@@ -1,8 +1,10 @@
-from PIL.Image import Image
+from PIL import Image
 from django.db import models
 from django.contrib.auth.models import User
 
 from django.urls import reverse
+
+
 
 import os
 class Profile(models.Model):
@@ -20,6 +22,10 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
 
+        if not self.profile_image:
+            self.profile_image = 'profile_pics/default.jpg'
+
+        super(Profile, self).save(*args, **kwargs)
         img = Image.open(self.image.path)
 
         if img.height > 300 or img.width > 300:
