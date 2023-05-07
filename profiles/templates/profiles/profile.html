@@ -8,6 +8,17 @@
     <img src="{% static 'profile_pics/default.jpg' %}" style="max-width:300px;">
 {% endif %}
 <p>Email: {{ profile.user.email }}</p>
-<p>Bio: {{ profile.bio }}</p>
-<p>Location: {{ profile.location }}</p>
-<p>Birthdate: {{ profile.birthdate }}</p>
+{% if profile.bio %}
+    <p>Bio: {{ profile.bio }}</p>
+{% endif %}
+{% if profile.location %}
+    <p>Location: {{ profile.location }}</p>
+{% endif %}
+{% if profile.birthdate %}
+    <p>Location: {{ profile.birthdate }}</p>
+{% endif %}
+
+{% if request.user == profile.user %}
+    <a href="{% url 'profile' user_id=profile.user.pk %}" class="btn btn-primary">프로필 보기</a>
+    <a href="{% url 'profile_update' pk=profile.pk %}" class="btn btn-primary">프로필 편집</a>
+{% endif %}

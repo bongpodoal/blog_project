@@ -8,6 +8,9 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+
+FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 50  # 50 MB
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
@@ -53,7 +56,10 @@ ROOT_URLCONF = 'do_it_django_prj.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [
+            os.path.join(BASE_DIR, 'templates'),
+            os.path.join(BASE_DIR, 'profiles', 'templates', 'profiles'),
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
