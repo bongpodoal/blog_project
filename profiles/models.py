@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 
 
-import os
 
 
 class Profile(models.Model):
@@ -17,6 +16,8 @@ class Profile(models.Model):
     website_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
+    extra_points = models.IntegerField(default=0)
+
 
     def __str__(self):
         return f'{self.user.username} Profile'

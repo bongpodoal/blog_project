@@ -27,6 +27,7 @@ def profile(request, user_id):
         profile = profiles.first()
         context = {
             'profile': profile,
+            'extra_points': profile.extra_points, # 추가
         }
 
         return render(request, 'profiles/profile.html', context)

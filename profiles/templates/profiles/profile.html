@@ -17,8 +17,11 @@
 {% if profile.birthdate %}
     <p>Location: {{ profile.birthdate }}</p>
 {% endif %}
+    <p>Extra Points: {{ extra_points }}</p> <!-- 추가 -->
 
+
+    <p>User ID: {{ user.id }}</p>
 {% if request.user == profile.user %}
-    <a href="{% url 'profile' user_id=profile.user.pk %}" class="btn btn-primary">프로필 보기</a>
     <a href="{% url 'profile_update' pk=profile.pk %}" class="btn btn-primary">프로필 편집</a>
+    <a href="/" class="btn btn-primary">돌아가기</a>
 {% endif %}
