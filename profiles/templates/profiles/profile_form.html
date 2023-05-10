@@ -1,8 +1,11 @@
 {% block content %}
-  <h1>Edit Profile</h1>
+<link rel="stylesheet" href="_static/blog/custom_css/custom.css">
+<div class="center-text">
+  <h1>프로필 편집</h1>
+</div>
   <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Save Changes</button>
+    <button type="submit">변경 저장하기</button>
   </form>
 {% endblock %}

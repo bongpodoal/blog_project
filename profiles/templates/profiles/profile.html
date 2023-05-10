@@ -1,27 +1,56 @@
+<!DOCTYPE html>
+<html>
 {% load static %}
+<head>
+    <title>{% block head_title %}Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
+    <link rel="stylesheet" href="{% static 'blog/custom_css/custom.css' %}" >
+    <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+</head>
+<body>
+{% include 'blog/navbar.html' %}
+<div class="container">
+  <div class="row">
+      <div class="col-sm-6">
+    <h1>{{ profile.user.username }}의 프로필</h1>
 
-
-<h1>{{ profile.user.username }}'s Profile</h1>
 {% if profile.profile_image %}
+
     <img src="{{ profile.profile_image.url }}" style="max-width:300px;">
 {% else %}
     <img src="{% static 'profile_pics/default.jpg' %}" style="max-width:300px;">
 {% endif %}
-<p>Email: {{ profile.user.email }}</p>
+<p>이메일: {{ profile.user.email }}</p>
 {% if profile.bio %}
-    <p>Bio: {{ profile.bio }}</p>
+    <p>소개: {{ profile.bio }}</p>
 {% endif %}
 {% if profile.location %}
-    <p>Location: {{ profile.location }}</p>
+    <p>사는곳: {{ profile.location }}</p>
 {% endif %}
 {% if profile.birthdate %}
-    <p>Location: {{ profile.birthdate }}</p>
+    <p>생일: {{ profile.birthdate }}</p>
 {% endif %}
-    <p>Extra Points: {{ extra_points }}</p> <!-- 추가 -->
-
+    <p>점수: {{ extra_points }}</p> <!-- 추가 -->
 
     <p>User ID: {{ user.id }}</p>
 {% if request.user == profile.user %}
     <a href="{% url 'profile_update' pk=profile.pk %}" class="btn btn-primary">프로필 편집</a>
     <a href="/" class="btn btn-primary">돌아가기</a>
 {% endif %}
+      </div>
+  </div>
+</div>
+<div class="mb-4"></div>
+{% include 'blog/footer.html' %}
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+</body>
+</html>
