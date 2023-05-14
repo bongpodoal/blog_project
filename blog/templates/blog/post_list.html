@@ -14,7 +14,7 @@
     {% if post_list.exists %}
         {% for p in post_list %}
             <!-- Blog Post -->
-            <div class="card mb-4" id="post-{{ p.pk }}">
+            <div class="card mb-3" id="post-{{ p.pk }}">
                 {% if p.head_image %}
                     <img class="card-img-top" src="{{ p.head_image.url }}" alt="{{ p }} head image">
                 {% else %}
@@ -42,7 +42,7 @@
                     <a href="{{ p.get_absolute_url }}" class="btn btn-primary">자세히.. &rarr;</a>
                 </div>
                 <div class="card-footer text-muted">
-                    Posted on {{ p.created_at}} by
+                    게시일 {{ p.created_at}} by
                     <a href="#">{{ p.author | upper }}</a>
                 </div>
             </div>
