@@ -1,18 +1,15 @@
 import os
 
 from PIL import Image
-from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.http import Http404
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy, reverse
-from django.views.generic import DetailView, UpdateView, CreateView
+from django.shortcuts import get_object_or_404, render
+from django.urls import reverse
+from django.views.generic import UpdateView
 
 from do_it_django_prj import settings
 from .forms import ProfileForm
 from .models import Profile
-
 
 
 def profile(request, user_id):
@@ -44,7 +41,27 @@ class ProfileCreateView(LoginRequiredMixin, CreateView):
         form.instance.user = self.request.user
         return super().form_valid(form)
 '''
+class ProfileUpdateView(LoginRequiredMixin, UpdateView):
+    model = Profile
+    form_class = ProfileForm
+    template_name = 'profiles/profile_form.html'
 
+
+    def get_success_url(self):
+        # 프로필 페이지로 리다이렉트합니다.
+        return reverse('profile', kwargs={'user_id': self.request.user.id})
+
+    def form_valid(self, form):
+        # 프로필 이미지 업로드 처리
+        profile_image = self.request.FILES.get('profile')
+        if profile_image:
+            img = Image.open(profile_image)
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
+            img.save(os.path.join(settings.MEDIA_ROOT, 'profile', f'{self.object.user.id}_profile.jpg'), quality=60)
+            self.object.profile_image = f'profile/{self.object.user.id}_profile.jpg'
+        return super().form_valid(form)
+'''
 class ProfileUpdateView(LoginRequiredMixin, UpdateView):
     model = Profile
     form_class = ProfileForm
@@ -62,3 +79,4 @@ class ProfileUpdateView(LoginRequiredMixin, UpdateView):
             img.save(os.path.join(settings.MEDIA_ROOT, 'profile_images', str(self.request.user.id) + '_profile.jpg'), quality=60)
             self.object.profile_image = 'profile_images/' + str(self.request.user.id) + '_profile.jpg'
         return super().form_valid(form)
+'''

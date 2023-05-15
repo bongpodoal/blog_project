@@ -12,7 +12,6 @@ class Profile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     profile_image = models.ImageField(upload_to='profile/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
-    image = models.ImageField(default='default.jpg', upload_to='profile_pics')
     website_url = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=30, blank=True, null=True)
     birthdate = models.DateField(blank=True, null=True)
