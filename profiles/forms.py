@@ -47,3 +47,4 @@ class ProfileForm(forms.ModelForm):
             )
 
         return profile_image
+
