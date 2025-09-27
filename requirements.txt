@@ -3,7 +3,6 @@ asttokens==2.1.0
 backcall==0.2.0
 beautifulsoup4==4.11.1
 certifi==2022.9.24
-cffi==1.15.1
 charset-normalizer==2.1.1
 colorama==0.4.6
 cryptography>=41
