@@ -6,10 +6,21 @@
   <title>Coding Mate</title>
 
   <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}">
-  <link rel="stylesheet" href="{% static 'single_pages/css/landing.css' %}">
+  <link rel="stylesheet" href="{% static 'single_pages/css/landing.css' %}?v=20250928"><!-- 캐시 무효화 -->
   <script src="https://kit.fontawesome.com/f9efb38e62.js" crossorigin="anonymous"></script>
 
   <style>
+    /* ===== 강제 덮어쓰기 (이 줄들이 가장 중요) ===== */
+    body{
+      /* 기존 보라색/예전 배경 제거 */
+      background: #0b1027 !important;
+      background-image: none !important;
+    }
+    section{
+      /* 혹시 섹션에 예전 배경이 남아 있으면 차단 */
+      background-image: none !important;
+    }
+
     :root{
       --brand-bg: #0c1432;
       --brand-grad-1: rgba(22, 29, 65, .55);
@@ -23,6 +34,7 @@
       --glass-shadow: rgba(6,12,34,.45);
     }
 
+    /* ===== Hero ===== */
     .hero {
       position: relative;
       min-height: 62vh;
@@ -38,8 +50,9 @@
     .hero::before {
       content: "";
       position: absolute; inset: 0;
-      /* 여기만 변경 */
-      background: url("{% static 'single_pages/images/img-20250928.jpg' %}");
+      /* 새 배경을 정확한 경로 + !important로 강제 */
+      background: url("{% static 'single_pages/images/img-20250928.jpg' %}?v=20250928")
+                  center/cover no-repeat fixed !important;
       transform: scale(1.03);
       filter: brightness(.58) saturate(1.05) contrast(1.02);
       z-index: -2;
