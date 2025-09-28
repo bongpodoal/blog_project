@@ -1,56 +1,237 @@
-<!DOCTYPE html>
-<html>
 {% load static %}
+<!DOCTYPE html>
+<html lang="ko">
 <head>
-    <title>{% block head_title %}Blog{% endblock %}</title>
-    <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}" media="screen">
-    <link rel="stylesheet" href="{% static 'blog/custom_css/custom.css' %}" >
-    <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+  <meta charset="utf-8">
+  <title>{{ profile.user.username }} · 프로필</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Bootstrap & 기본 CSS -->
+  <link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}">
+  <link rel="stylesheet" href="{% static 'blog/custom_css/custom.css' %}">
+  <script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+
+  <!-- 페이지 전용 스타일 (원한다면 custom.css로 옮겨도 됩니다) -->
+  <style>
+    /* Hero */
+    .profile-hero {
+      position: relative;
+      background: linear-gradient(135deg, #f8fafc 0%, #eef2ff 40%, #f5f3ff 100%);
+      border-bottom: 1px solid rgba(0,0,0,.06);
+      padding: 72px 0 96px;
+      overflow: hidden;
+    }
+    .profile-hero .blob {
+      position: absolute; inset: -20% -10% auto auto;
+      width: 480px; height: 480px;
+      background: radial-gradient(closest-side, rgba(99,102,241,.18), transparent 70%);
+      filter: blur(6px);
+      pointer-events: none;
+    }
+
+    /* 카드 */
+    .elev-card {
+      background: #fff;
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.05);
+    }
+
+    /* 아바타 */
+    .avatar-ring {
+      position: relative;
+      display: inline-block;
+      border-radius: 9999px;
+      padding: 4px;
+      background: conic-gradient(from 180deg at 50% 50%, #6366f1, #a855f7, #06b6d4, #22c55e, #6366f1);
+    }
+    .avatar {
+      width: 120px; height: 120px;
+      border-radius: 9999px;
+      object-fit: cover;
+      background: #fff;
+    }
+    @media (min-width: 768px) {
+      .avatar { width: 140px; height: 140px; }
+    }
+
+    /* 배지/라벨 */
+    .soft-badge {
+      background: #f1f5f9;
+      border-radius: 9999px;
+      padding: 6px 12px;
+      font-size: 12px;
+      color: #0f172a;
+    }
+    .muted { color: #64748b; }
+
+    /* 정보 블록 */
+    .info-label {
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: .25rem;
+      display: flex; align-items: center; gap: .5rem;
+    }
+    .info-value { color: #334155; }
+
+    /* 진행바 */
+    .progress {
+      background: #f1f5f9;
+      border-radius: 9999px;
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #6366f1, #22c55e);
+      border-radius: 9999px;
+    }
+
+    /* 버튼 */
+    .btn-soft {
+      border-radius: 12px;
+      border: 1px solid rgba(0,0,0,.08);
+      background: #fff;
+    }
+    .btn-soft:hover { background: #f8fafc; }
+
+    /* 섹션 제목 */
+    .section-title {
+      font-weight: 700;
+      font-size: 1.05rem;
+      color: #0f172a;
+      margin-bottom: .75rem;
+    }
+  </style>
 </head>
 <body>
-{% include 'blog/navbar.html' %}
-<div class="container">
-  <div class="row">
-      <div class="col-sm-6">
-    <h1>{{ profile.user.username }}의 프로필</h1>
+  {% include 'blog/navbar.html' %}
 
-{% if profile.profile_image %}
-
-    <img src="{{ profile.profile_image.url }}" style="max-width:300px;">
-{% else %}
-    <img src="{% static 'profile_pics/default.jpg' %}" style="max-width:300px;">
-{% endif %}
-<p>이메일: {{ profile.user.email }}</p>
-{% if profile.bio %}
-    <p>소개: {{ profile.bio }}</p>
-{% endif %}
-{% if profile.location %}
-    <p>사는곳: {{ profile.location }}</p>
-{% endif %}
-{% if profile.birthdate %}
-    <p>생일: {{ profile.birthdate }}</p>
-{% endif %}
-    <p>점수: {{ extra_points }}</p> <!-- 추가 -->
-
-    <p>User ID: {{ user.id }}</p>
-{% if request.user == profile.user %}
-    <a href="{% url 'profile_update' pk=profile.pk %}" class="btn btn-primary">프로필 편집</a>
-    <a href="/" class="btn btn-primary">돌아가기</a>
-{% endif %}
+  <!-- Hero -->
+  <section class="profile-hero">
+    <div class="blob"></div>
+    <div class="container">
+      <div class="row align-items-end">
+        <div class="col-md-8 d-flex align-items-center">
+          <div class="avatar-ring mr-3 mr-md-4">
+            {% if profile.profile_image %}
+              <img class="avatar" src="{{ profile.profile_image.url }}" alt="프로필 이미지">
+            {% else %}
+              <img class="avatar" src="/media/profile/default-avatar.png" alt="기본 프로필">
+            {% endif %}
+          </div>
+          <div>
+            <div class="soft-badge mb-2"><i class="fas fa-user"></i> Member</div>
+            <h1 class="h3 mb-1">{{ profile.user.username }}</h1>
+            <div class="muted small">
+              {% if profile.location %}<i class="fas fa-location-dot"></i> {{ profile.location }} · {% endif %}
+              <i class="far fa-envelope"></i> {{ profile.user.email }}
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 text-md-right mt-4 mt-md-0">
+          {% if request.user == profile.user %}
+            <a href="{% url 'profile_update' pk=profile.pk %}" class="btn btn-primary btn-sm">
+              <i class="fas fa-pen"></i> 프로필 편집
+            </a>
+          {% endif %}
+          <a href="/" class="btn btn-soft btn-sm ml-2">돌아가기</a>
+        </div>
       </div>
-  </div>
-</div>
-<div class="mb-4"></div>
-{% include 'blog/footer.html' %}
+    </div>
+  </section>
 
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-        crossorigin="anonymous"></script>
+  <!-- 본문 -->
+  <main class="container" style="margin-top: -56px;">
+    <div class="row">
+      <!-- 왼쪽: 소개/링크 -->
+      <div class="col-lg-5 mb-4">
+        <div class="p-4 elev-card">
+          <div class="section-title"><i class="fas fa-id-card-clip"></i> 소개</div>
+          {% if profile.bio %}
+            <p class="info-value mb-0">{{ profile.bio|linebreaksbr }}</p>
+          {% else %}
+            <p class="text-muted mb-0">아직 소개가 없습니다.</p>
+          {% endif %}
+        </div>
+
+        <div class="p-4 elev-card mt-3">
+          <div class="section-title"><i class="fas fa-link"></i> 링크</div>
+          <ul class="list-unstyled mb-0">
+            <li class="mb-2">
+              {% if profile.website_url %}
+                <a href="{{ profile.website_url }}" target="_blank" rel="noopener" class="info-value">
+                  <i class="fas fa-globe-asia"></i> {{ profile.website_url }}
+                </a>
+              {% else %}
+                <span class="text-muted"><i class="fas fa-globe-asia"></i> 등록된 웹사이트가 없습니다.</span>
+              {% endif %}
+            </li>
+            <li>
+              {% if profile.birthdate %}
+                <span class="info-value"><i class="far fa-cake-candles"></i> {{ profile.birthdate }}</span>
+              {% else %}
+                <span class="text-muted"><i class="far fa-cake-candles"></i> 생일 정보 없음</span>
+              {% endif %}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- 오른쪽: 하이라이트 -->
+      <div class="col-lg-7 mb-4">
+        <div class="p-4 elev-card">
+          <div class="section-title"><i class="fas fa-sparkles"></i> 하이라이트</div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <div class="info-label"><i class="fas fa-star"></i> 점수</div>
+              <div class="info-value">
+                {{ profile.extra_points|default:"0" }}
+                <div class="progress mt-2" style="height: 6px;">
+                  {% with p=profile.extra_points|default:0 %}
+                    <div class="progress-bar" role="progressbar"
+                         style="width: {{ p }}%;" aria-valuenow="{{ p }}" aria-valuemin="0" aria-valuemax="100"></div>
+                  {% endwith %}
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <div class="info-label"><i class="fas fa-hashtag"></i> 사용자 ID</div>
+              <div class="info-value">{{ profile.user.id }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <div class="info-label"><i class="fas fa-envelope"></i> 이메일</div>
+              <div class="info-value">{{ profile.user.email }}</div>
+            </div>
+
+            <div class="col-md-6 mb-3">
+              <div class="info-label"><i class="fas fa-location-dot"></i> 위치</div>
+              <div class="info-value">
+                {% if profile.location %}{{ profile.location }}{% else %}<span class="text-muted">미입력</span>{% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 이미지 크게 보기(선택) -->
+        <div class="p-4 elev-card mt-3">
+          <div class="section-title"><i class="fas fa-image"></i> 프로필 이미지</div>
+          <div class="text-center">
+            {% if profile.profile_image %}
+              <img src="{{ profile.profile_image.url }}" class="img-fluid rounded" style="max-height: 360px;" alt="프로필 이미지 크게 보기">
+            {% else %}
+              <img src="{% static 'profile_pics/default.jpg' %}" class="img-fluid rounded" style="max-height: 360px;" alt="기본 프로필">
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-4"></div>
+  </main>
+
+  {% include 'blog/footer.html' %}
+
+  <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

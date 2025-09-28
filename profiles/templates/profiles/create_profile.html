@@ -1,20 +1,131 @@
+{% load static %}
+{% load crispy_forms_tags %}
 
-
-{% block title %}
-    Create Profile - MyWebsite
-{% endblock %}
+{% block title %}Create Profile · ITSW{% endblock %}
 
 {% block content %}
-    <h1>Create your profile</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Create Profile</button>
-    </form>
+<link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'blog/custom_css/custom.css' %}">
+<script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+
+<style>
+  .page-wrap { padding: 32px 0 48px; }
+  .elev-card {
+    background:#fff; border:1px solid rgba(0,0,0,.06);
+    border-radius: 20px; box-shadow:0 8px 30px rgba(0,0,0,.05);
+  }
+  .form-title { font-weight:700; color:#0f172a; }
+  .muted { color:#64748b; }
+
+  /* 아바타 프리뷰 */
+  .avatar-ring {
+    display:inline-block; border-radius:9999px; padding:4px;
+    background:conic-gradient(from 180deg at 50% 50%, #6366f1, #a855f7, #06b6d4, #22c55e, #6366f1);
+  }
+  .avatar {
+    width:120px; height:120px; border-radius:9999px; object-fit:cover; background:#fff;
+  }
+  @media (min-width:768px){ .avatar{ width:140px; height:140px; } }
+
+  /* 드롭존 */
+  .dropzone {
+    background:#f8fafc; border:1.5px dashed #cbd5e1; border-radius:16px;
+    padding:16px; text-align:center; transition:.2s;
+  }
+  .dropzone.dragover { background:#eef2ff; border-color:#818cf8; }
+  .btn-soft {
+    border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fff;
+  }
+  .btn-soft:hover { background:#f1f5f9; }
+</style>
+
+<div class="container page-wrap">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="elev-card p-4 p-md-5">
+
+        <div class="d-flex align-items-center mb-4">
+          <div class="avatar-ring mr-3 mr-md-4">
+            <img id="avatarPreview" class="avatar" src="{% static 'profile_pics/default.jpg' %}" alt="프로필 미리보기">
+          </div>
+          <div>
+            <h1 class="h4 form-title mb-1">프로필 만들기</h1>
+            <div class="muted small">이미지, 소개, 위치, 웹사이트 등을 등록할 수 있어요.</div>
+          </div>
+        </div>
+
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+
+          <!-- 파일 입력 전용 드롭존(선택 사항) -->
+          <div id="imageDropzone" class="dropzone mb-4">
+            <div class="mb-2"><i class="fas fa-cloud-upload-alt"></i> 이미지 드래그&드롭 또는 선택</div>
+            <button type="button" class="btn btn-soft btn-sm" id="selectImageBtn">
+              <i class="fas fa-image"></i> 내 컴퓨터에서 선택
+            </button>
+            <div class="muted small mt-2">권장: 정사각형/원형에 어울리는 이미지</div>
+          </div>
+
+          <!-- crispy로 폼 전체 렌더 -->
+          {{ form|crispy }}
+
+          <div class="d-flex justify-content-end mt-4">
+            <a href="/" class="btn btn-soft mr-2">취소</a>
+            <button type="submit" class="btn btn-primary">프로필 생성</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 부트스트랩 JS (필요 시) -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+<script>
+  (function () {
+    // 폼 안의 파일 입력을 찾되, name이 profile_image일 가능성을 우선 시도
+    var fileInput = document.querySelector('input[type="file"][name="profile_image"]')
+                   || document.querySelector('input[type="file"]');
+    var preview   = document.getElementById('avatarPreview');
+    var dz        = document.getElementById('imageDropzone');
+    var btn       = document.getElementById('selectImageBtn');
+
+    if (!fileInput) return;
+
+    // 파일 선택 버튼 -> 숨겨진 파일 입력 클릭
+    btn.addEventListener('click', function () { fileInput.click(); });
+
+    // 파일 선택 시 프리뷰
+    fileInput.addEventListener('change', function (e) {
+      if (!e.target.files || !e.target.files[0]) return;
+      var file = e.target.files[0];
+      if (!file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function (ev) { preview.src = ev.target.result; };
+      reader.readAsDataURL(file);
+    });
+
+    // 드래그&드롭 업로드
+    ['dragenter','dragover'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('dragover'); });
+    });
+    ['dragleave','drop'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('dragover'); });
+    });
+    dz.addEventListener('drop', function(e){
+      var files = e.dataTransfer.files;
+      if (!files || !files[0]) return;
+      if (!files[0].type.startsWith('image/')) return;
+      // 파일 입력에 주입
+      fileInput.files = files;
+      var reader = new FileReader();
+      reader.onload = function (ev) { preview.src = ev.target.result; };
+      reader.readAsDataURL(files[0]);
+    });
+  })();
+</script>
 {% endblock %}
-
-
-
-
-
-

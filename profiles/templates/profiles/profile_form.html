@@ -1,11 +1,135 @@
+{% load static %}
+
 {% block content %}
-<link rel="stylesheet" href="_static/blog/custom_css/custom.css">
-<div class="center-text">
-  <h1>프로필 편집</h1>
+<link rel="stylesheet" href="{% static 'blog/bootstrap/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'blog/custom_css/custom.css' %}">
+<script src="https://kit.fontawesome.com/726bbd6862.js" crossorigin="anonymous"></script>
+
+<style>
+  .page-wrap { padding: 32px 0 48px; }
+  .card-elev {
+    background:#fff; border:1px solid rgba(0,0,0,.06);
+    border-radius:20px; box-shadow:0 8px 30px rgba(0,0,0,.05);
+  }
+  .title { font-weight:700; color:#0f172a; }
+  .muted { color:#64748b; }
+
+  /* 아바타 프레임 */
+  .avatar-ring {
+    display:inline-block; border-radius:9999px; padding:4px;
+    background:conic-gradient(from 180deg at 50% 50%, #6366f1, #a855f7, #06b6d4, #22c55e, #6366f1);
+  }
+  .avatar {
+    width:120px; height:120px; border-radius:9999px; object-fit:cover; background:#fff;
+  }
+  @media (min-width:768px){ .avatar{ width:140px; height:140px; } }
+
+  /* 드롭존 */
+  .dropzone {
+    background:#f8fafc; border:1.5px dashed #cbd5e1; border-radius:16px;
+    padding:16px; text-align:center; transition:.2s;
+  }
+  .dropzone.dragover { background:#eef2ff; border-color:#818cf8; }
+  .btn-soft { border-radius:12px; border:1px solid rgba(0,0,0,.08); background:#fff; }
+  .btn-soft:hover { background:#f1f5f9; }
+</style>
+
+<div class="container page-wrap">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <div class="card-elev p-4 p-md-5">
+        <!-- 헤더 + 현재 아바타 미리보기 -->
+        <div class="d-flex align-items-center mb-4">
+          <div class="avatar-ring mr-3 mr-md-4">
+            {% with img=form.instance.profile_image %}
+              {% if img %}
+                <img id="avatarPreview" class="avatar" src="{{ img.url }}" alt="프로필 미리보기">
+              {% else %}
+                <img id="avatarPreview" class="avatar" src="{% static 'profile_pics/default.jpg' %}" alt="프로필 미리보기">
+              {% endif %}
+            {% endwith %}
+          </div>
+          <div>
+            <h1 class="h4 title mb-1">프로필 편집</h1>
+            <div class="muted small">이미지, 소개, 위치, 웹사이트 등을 업데이트하세요.</div>
+          </div>
+        </div>
+
+        <!-- 드롭존 안내 -->
+        <div id="imageDropzone" class="dropzone mb-4">
+          <div class="mb-2">
+            <i class="fas fa-cloud-upload-alt"></i>
+            새 프로필 이미지를 드래그&드롭하거나 선택하세요
+          </div>
+          <button type="button" class="btn btn-soft btn-sm" id="selectImageBtn">
+            <i class="fas fa-image"></i> 내 컴퓨터에서 선택
+          </button>
+          <div class="muted small mt-2">권장: 정사각형 이미지 · PNG/JPG</div>
+        </div>
+
+        <!-- 실제 폼 -->
+        <form method="post" enctype="multipart/form-data" novalidate>
+          {% csrf_token %}
+          {{ form.as_p }}
+
+          <div class="d-flex justify-content-end mt-3">
+            <a href="{% url 'profiles:profile' form.instance.user.id %}" class="btn btn-soft mr-2">취소</a>
+            <button type="submit" class="btn btn-primary">변경 저장하기</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
-  <form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">변경 저장하기</button>
-  </form>
+
+<!-- (선택) 부트스트랩 JS -->
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+
+<script>
+  (function () {
+    // 폼 안의 파일 입력(필드명이 무엇이든 첫 번째 file input 사용)
+    var fileInput = document.querySelector('form input[type="file"]');
+    var preview   = document.getElementById('avatarPreview');
+    var dz        = document.getElementById('imageDropzone');
+    var btn       = document.getElementById('selectImageBtn');
+
+    if (!fileInput) return;
+
+    // 버튼으로 파일 선택
+    btn.addEventListener('click', function () { fileInput.click(); });
+
+    // 파일 선택 시 프리뷰
+    fileInput.addEventListener('change', function (e) {
+      if (!e.target.files || !e.target.files[0]) return;
+      var file = e.target.files[0];
+      if (!file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function (ev) { preview.src = ev.target.result; };
+      reader.readAsDataURL(file);
+    });
+
+    // 드래그&드롭
+    ['dragenter','dragover'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.add('dragover'); });
+    });
+    ['dragleave','drop'].forEach(function(evt){
+      dz.addEventListener(evt, function(e){ e.preventDefault(); e.stopPropagation(); dz.classList.remove('dragover'); });
+    });
+    dz.addEventListener('drop', function(e){
+      var files = e.dataTransfer.files;
+      if (!files || !files[0]) return;
+      if (!files[0].type.startsWith('image/')) return;
+      // 파일 입력에 주입 + 프리뷰
+      const dt = new DataTransfer();
+      dt.items.add(files[0]);
+      fileInput.files = dt.files;
+
+      var reader = new FileReader();
+      reader.onload = function (ev) { preview.src = ev.target.result; };
+      reader.readAsDataURL(files[0]);
+    });
+  })();
+</script>
 {% endblock %}
