@@ -43,7 +43,7 @@
           <div class="avatar-ring mr-3 mr-md-4">
             {% with img=form.instance.profile_image %}
               {% if img %}
-                <img id="avatarPreview" class="avatar" src="{{ img.url }}" alt="프로필 미리보기">
+                <img id="avatarPreview" class="avatar" src="{{ img.url }}" alt="미리보기">
               {% else %}
                 <img id="avatarPreview" class="avatar" src="{% static 'profile_pics/default.jpg' %}" alt="프로필 미리보기">
               {% endif %}
