@@ -113,7 +113,7 @@
             {% if profile.profile_image %}
               <img class="avatar" src="{{ profile.profile_image.url }}" alt="프로필 이미지">
             {% else %}
-              <img class="avatar" src="/media/profile/default-avatar.png" alt="기본 프로필">
+              <img class="avatar" src="/media/profile/upload.jpg" alt="기본 프로필">
             {% endif %}
           </div>
           <div>
@@ -218,7 +218,7 @@
             {% if profile.profile_image %}
               <img src="{{ profile.profile_image.url }}" class="img-fluid rounded" style="max-height: 360px;" alt="프로필 이미지 크게 보기">
             {% else %}
-              <img src="{% static 'profile_pics/default.jpg' %}" class="img-fluid rounded" style="max-height: 360px;" alt="기본 프로필">
+              <img src="/media/profile/upload.jpg" class="img-fluid rounded" style="max-height: 360px;" alt="기본 프로필">
             {% endif %}
           </div>
         </div>
