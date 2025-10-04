@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CEJ Portfolio</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+:root {
+  --bg-dark: #0b0b0f;
+  --bg-light: #141414;
+  --text: #e8e8e8;
+  --accent: #00ffc6;
+  --accent-glow: 0 0 15px rgba(0, 255, 198, 0.5);
+  --gradient: linear-gradient(90deg, #00ff88, #00bfff, #a855f7);
+}
+
+* {margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; scroll-behavior:smooth;}
+body {background:var(--bg-dark); color:var(--text); overflow-x:hidden; position:relative;}
+
+/* 배경 입자 */
+#particles {position: fixed; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none;}
+
+header {
+  display:flex; justify-content:space-between; align-items:center;
+  padding:1.3rem 8%; background:rgba(10,10,15,0.6); position:fixed; top:0;
+  width:100%; backdrop-filter:blur(12px); border-bottom:1px solid rgba(255,255,255,0.05); z-index:10;
+}
+
+header h1 {
+  font-size:1.6rem; font-weight:700; background:var(--gradient); -webkit-background-clip:text; color:transparent; letter-spacing:1px;
+}
+
+nav ul {display:flex; list-style:none; gap:2rem;}
+nav a {text-decoration:none; color:var(--text); font-weight:400; position:relative; transition:0.3s;}
+nav a::after {content:''; position:absolute; bottom:-5px; left:0; width:0%; height:2px; background:var(--gradient); transition:width 0.3s ease;}
+nav a:hover::after {width:100%;}
+
+section {
+  min-height:100vh; padding:9rem 10% 5rem 10%; display:flex; flex-direction:column;
+  justify-content:center; position:relative; z-index:1; opacity:0; transform:translateY(50px);
+  transition: all 0.9s ease;
+}
+
+section.visible {opacity:1; transform:translateY(0);}
+
+/* 홈 */
+#home {text-align:center;}
+#home h2 {font-size:3.2rem; font-weight:700; background:var(--gradient); -webkit-background-clip:text; color:transparent; margin-bottom:1rem;}
+#home p {color:#aaa; font-size:1.3rem; line-height:1.7; margin-top:1rem; font-family:'JetBrains Mono', monospace;}
+#typed-text {border-right:2px solid var(--accent); padding-right:2px; white-space:pre; overflow:hidden; display:inline-block;}
+
+/* 섹션 제목 */
+.section-title {
+  font-size:2.2rem; background:var(--gradient); -webkit-background-clip:text; color:transparent;
+  margin-bottom:3rem; text-align:center; font-weight:700;
+}
+
+/* 카드 */
+.projects, .skills {display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:2rem;}
+.card {
+  background:var(--bg-light); padding:2rem; border-radius:15px;
+  border:1px solid rgba(255,255,255,0.08); transition:all 0.4s ease; box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+.card:hover {transform:translateY(-10px) scale(1.02); border-color:var(--accent); box-shadow:0 0 25px rgba(0,255,136,0.15);}
+.card h3 {color:var(--accent); margin-bottom:1rem; font-family:'JetBrains Mono', monospace;}
+.card p {color:#b8b8b8; line-height:1.6;}
+
+/* Contact */
+#contact {text-align:center;}
+#contact p {color:#aaa; margin-bottom:1.5rem; font-size:1.1rem;}
+.contact-links {display:flex; justify-content:center; gap:1.5rem; flex-wrap:wrap; margin-top:1rem;}
+.contact-links a {
+  display:inline-block; color:var(--accent); text-decoration:none; border:1px solid var(--accent);
+  padding:0.9rem 2.3rem; border-radius:10px; font-weight:600; transition:0.3s; box-shadow:var(--accent-glow);
+}
+.contact-links a:hover {background:var(--accent); color:var(--bg-dark); transform:translateY(-3px);}
+
+/* Footer */
+footer {text-align:center; padding:2rem; font-size:0.9rem; color:#777; border-top:1px solid rgba(255,255,255,0.08); letter-spacing:1px;}
+
+/* Responsive */
+@media (max-width:768px){
+  header{flex-direction:column; gap:0.5rem;}
+  #home h2{font-size:2.4rem;}
+  nav ul{gap:1rem;}
+  .section-title{font-size:1.8rem;}
+}
+</style>
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<header>
+  <h1>MakeCode &lt;:with me:&gt;</h1>
+  <nav>
+    <ul>
+      <li><a href="#home">소개</a></li>
+      <li><a href="#projects">프로젝트</a></li>
+      <li><a href="#skills">기술스택</a></li>
+      <li><a href="#contact">연락하기</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section id="home">
+  <h2>조은준</h2>
+  <p id="typed-text"></p>
+</section>
+
+<section id="projects">
+  <h2 class="section-title">프로젝트</h2>
+  <div class="projects">
+    <div class="card"><h3>Viper 언어</h3><p>직접 설계한 프로그래밍 언어로, 간결한 문법과 빠른 실행 속도가 특징입니다.</p></div>
+    <div class="card"><h3>Takkari Bot</h3><p>디스코드용 고성능 자동화 봇으로 Flask와 Python을 이용해 제작했습니다.</p></div>
+    <div class="card"><h3>Project WebService</h3><p>Flask 기반의 웹 플랫폼으로, 사용자 친화적인 UI와 안정적인 서버 구조를 구현했습니다.</p></div>
+  </div>
+</section>
+
+<section id="skills">
+  <h2 class="section-title">기술스택</h2>
+  <div class="skills">
+    <div class="card"><h3>Python</h3><p>Flask, Discord.py, AI API 등 다양한 프로젝트에 활용.</p></div>
+    <div class="card"><h3>JavaScript</h3><p>프론트엔드 인터랙션 및 동적 애니메이션 구현에 사용.</p></div>
+    <div class="card"><h3>HTML & CSS</h3><p>모던하고 직관적인 UI를 구현하기 위한 기반 기술.</p></div>
+    <div class="card"><h3>Git & Render</h3><p>버전 관리와 자동 배포 시스템 경험.</p></div>
+  </div>
+</section>
+
+<section id="contact">
+  <h2 class="section-title">연락하기</h2>
+  <p>프로젝트 제안이나 협업 문의는 언제나 환영입니다 💬</p>
+  <div class="contact-links">
+    <a href="mailto:eunjunjo837@naver.com">이메일 보내기</a>
+    <a href="https://github.com/sentimentaleunjun" target="_blank">GitHub 방문</a>
+  </div>
+</section>
+
+<footer>© 2025 GSEJ | Built with ❤️ by 조은준</footer>
+
+<script>
+// 스크롤 시 fade-in
+const sections = document.querySelectorAll('section');
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{ if(entry.isIntersecting) entry.target.classList.add('visible'); });
+},{threshold:0.15});
+sections.forEach(sec=>observer.observe(sec));
+
+// 부드러운 스크롤
+document.querySelectorAll('nav a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'});
+  });
+});
+
+// 타이핑 효과
+const typedText = document.getElementById('typed-text');
+const text = "안녕하세요 👋 저는 창의적인 개발자, 조은준입니다. 미래를 바꾸는 코드를 짭니다!";
+let index = 0;
+function type() {
+  if(index < text.length){
+    typedText.textContent += text.charAt(index);
+    index++;
+    setTimeout(type, 40);
+  }
+}
+type();
+
+// 입자 효과
+const canvas = document.getElementById('particles');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let particlesArray = [];
+const numberOfParticles = 80;
+
+class Particle {
+  constructor(){
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.size = Math.random() * 2 + 1;
+    this.speedX = Math.random() * 1 - 0.5;
+    this.speedY = Math.random() * 1 - 0.5;
+  }
+  update(){
+    this.x += this.speedX;
+    this.y += this.speedY;
+    if(this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+    if(this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+  }
+  draw(){
+    ctx.fillStyle = "rgba(0,255,198,0.7)";
+    ctx.beginPath();
+    ctx.arc(this.x,this.y,this.size,0,Math.PI*2);
+    ctx.fill();
+  }
+}
+
+function initParticles(){
+  particlesArray = [];
+  for(let i=0;i<numberOfParticles;i++){
+    particlesArray.push(new Particle());
+  }
+}
+function animateParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particlesArray.forEach(p=>{
+    p.update();
+    p.draw();
+  });
+  requestAnimationFrame(animateParticles);
+}
+initParticles();
+animateParticles();
+
+window.addEventListener('resize',()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  initParticles();
+});
+</script>
+
+</body>
+</html>

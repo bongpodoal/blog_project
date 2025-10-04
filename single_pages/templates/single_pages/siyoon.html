@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>김시윤 - 자기소개</title>
+
+  <!-- 구글 폰트 -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet" />
+  
+  <!-- 아이콘 (Font Awesome CDN) -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    crossorigin="anonymous"
+  />
+
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      width: 100%;
+      max-width: 850px;
+      box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      overflow: hidden;
+      display: flex;
+      flex-wrap: wrap;
+      animation: fadeIn 1s ease forwards;
+    }
+
+    /* 프로필 섹션 */
+    .profile-section {
+      flex: 1 1 300px;
+      background: #4c4cff88;
+      padding: 40px 30px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-right: 2px solid rgba(255,255,255,0.15);
+    }
+
+    /* SVG 프로필 아이콘 */
+    .profile-img.svg-placeholder {
+      width: 150px;
+      height: 150px;
+      margin: 0 auto 25px;
+      border-radius: 50%;
+      background: rgba(255 255 255 / 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 15px rgba(255,255,255,0.3);
+      transition: transform 0.3s ease;
+      cursor: default;
+    }
+
+    .profile-img.svg-placeholder:hover {
+      transform: scale(1.05) rotate(3deg);
+    }
+
+    .name {
+      font-weight: 600;
+      font-size: 2.5rem;
+      letter-spacing: 2px;
+      margin-bottom: 6px;
+    }
+
+    .subtitle {
+      font-weight: 300;
+      font-size: 1.1rem;
+      color: #d1d1ffcc;
+      margin-bottom: 10px;
+    }
+
+    /* 내용 섹션 */
+    .content-section {
+      flex: 2 1 450px;
+      padding: 40px 50px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .content-section p {
+      font-size: 1.15rem;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      color: #eee;
+    }
+
+    /* 연락처 */
+    .contact {
+      margin-top: 30px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      margin-bottom: 15px;
+      font-size: 1.1rem;
+      color: #eee;
+      transition: color 0.3s;
+    }
+
+    .contact-item i {
+      width: 28px;
+      font-size: 1.3rem;
+      margin-right: 15px;
+      color: #a6a6ff;
+      transition: color 0.3s;
+    }
+
+    .contact-item a {
+      color: #eee;
+      text-decoration: none;
+      word-break: break-all;
+      transition: color 0.3s;
+    }
+
+    .contact-item a:hover,
+    .contact-item:hover i {
+      color: #ffcc00;
+    }
+
+    /* 푸터 */
+    footer {
+      text-align: center;
+      padding: 20px 10px;
+      font-size: 0.9rem;
+      color: #bbb;
+      background: rgba(255,255,255,0.1);
+      border-top: 1px solid rgba(255,255,255,0.15);
+      margin-top: 40px;
+      border-radius: 0 0 20px 20px;
+    }
+
+    /* 반응형 */
+    @media (max-width: 720px) {
+      .card {
+        flex-direction: column;
+      }
+
+      .profile-section {
+        border-right: none;
+        border-bottom: 2px solid rgba(255,255,255,0.15);
+        padding-bottom: 30px;
+      }
+
+      .content-section {
+        padding: 30px 25px 40px;
+      }
+    }
+
+    /* 애니메이션 */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <article class="card" role="main" aria-label="자기소개 카드">
+    <section class="profile-section">
+      <div class="profile-img svg-placeholder" aria-label="프로필 이미지 대체 아이콘" role="img" title="프로필 이미지">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="150" height="150" aria-hidden="true">
+          <circle cx="12" cy="8" r="4" />
+          <path d="M4 20c0-4 8-4 8-4s8 0 8 4v1H4v-1z" />
+        </svg>
+      </div>
+      <h1 class="name">김시윤</h1>
+      <p class="subtitle">예비 프론트엔드 개발자 · UI/UX 열정러</p>
+    </section>
+
+    <section class="content-section">
+      <p>
+        안녕하세요! 저는 사용자 경험을 최우선으로 생각하는 프론트엔드 개발자 김시윤입니다.<br />
+        Python 바탕으로 아름답고 반응형인 웹사이트를 만드는 데 집중하고 있습니다.<br />
+        최신 기술 학습에 꾸준히 매진하고 있으며, 디자인과 개발의 경계를 넘나드는
+        다재다능한 개발자가 되고자 노력 중입니다.
+      </p>
+
+      <p>
+        항상 배우고 성장하는 자세로 프로젝트를 수행하며, 협업을 통해 더 나은 결과물을 만들고자 합니다.<br />
+        새로운 도전과 혁신을 두려워하지 않고, 창의적인 해결책을 제시하는 개발자가 되겠습니다.
+      </p>
+
+      <div class="contact" aria-label="연락처 정보">
+        <div class="contact-item">
+          <i class="fa-solid fa-envelope"></i>
+          <a href="mailto:honggildong@example.com" aria-label="이메일 보내기">honggildong@example.com</a>
+        </div>
+        <div class="contact-item">
+          <i class="fa-brands fa-github"></i>
+          <a href="https://github.com/your-github-id" target="_blank" rel="noopener noreferrer" aria-label="깃허브 방문">github.com/your-github-id</a>
+        </div>
+        <div class="contact-item">
+          <i class="fa-solid fa-blog"></i>
+          <a href="https://yourblog.com" target="_blank" rel="noopener noreferrer" aria-label="블로그 방문">yourblog.com</a>
+        </div>
+      </div>
+    </section>
+  </article>
+
+  <footer>
+    &copy; 2025 홍길동. 모든 권리 보유.
+  </footer>
+  
+</body>
+</html>
